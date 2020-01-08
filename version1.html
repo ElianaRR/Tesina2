@@ -1,0 +1,82 @@
+<html lang="ca">
+
+<head>
+    <title>Troba el lloc dels teus somnis pel teu casament</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Inserción archivo CSS leaflet en la cabecera y de overpass-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.css" />
+    <link rel="stylesheet" href="OverPassLayer.css" />
+    <!--Inserción archivo javascript leaflet y de overpass-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.js"></script>
+    <script src="OverPassLayer.bundle.js"></script>
+
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+    <link rel="stylesheet" href="css/leaflet.awesome-markers.css">
+    <script src="js/leaflet.awesome-markers.js"></script>
+
+    <style>
+        /*definició estil de mapa */
+        #mapid { 
+            height: 100%;
+            width: 100%; }
+    </style>
+    <script>
+        function init(){
+        // inicialitzo el mapa del div mapid amb un zoom i centre determinats
+            var mimapa = L.map("mapid",{
+            center:[41.39776918360643, 2.1961095928327268],
+            //zoom:9,
+            zoom:24,
+            //zoomControl: false,
+            });
+            var osm= L.tileLayer(
+                'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png',{
+                //'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+                maxZoom : 14,
+                minZoom : 1,
+                attribution : 'OSM'
+            }).addTo (mimapa); //vull afegir aquesta capa a la meva variable "mimapa"
+            controlEscala=L.control.scale({metric:'true'});
+            controlEscala.addTo (mimapa); //afegeixo control d'escala
+            
+            var popup = L.popup();
+            function onMapClick(e) {
+            popup
+                .setLatLng(e.latlng) // Sets the geographical point where the popup will open.
+                .setContent("Has hecho click en la coordenada:<br> " +  e.latlng.lat.toString() + "," +  e.latlng.lng.toString()) // Sets the HTML content of the popup.
+                .openOn(map); // Adds the popup to the map and closes the previous one. 
+            }       
+            map.on('click', onMapClick);
+            
+
+            /*var redMarker = L.AwesomeMarkers.icon({
+                icon: 'coffee',
+                markerColor: 'red'
+            });
+      
+            L.marker([41.39776918360643, 2.1961095928327268], {icon: redMarker}).addTo(mimapa);*/
+            //L.marker([41.3954, 2.16859]).addTo(mimapa).bindPopup('Hola punto');
+            
+
+            /*map.on('click', function(ev) {
+                 alert(ev.latlng); // ev is an event object (MouseEvent in this case)
+            });*/
+
+            
+           /* var marker = L.marker([41.3954, 2.16859]).on('click', onClick);
+            function onClick(e) {alert(e.latlng);}
+            marker.addTo(mimapa)*/
+
+          
+            
+           
+
+        };
+    </script>
+
+</head>
+<!--crido a la funció inicialitzar en el body-->
+<body onLoad="init()">
+    <div id="mapid"></div>
+</body>
