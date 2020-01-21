@@ -30,37 +30,69 @@
             zoom:24,
             //zoomControl: false,
             });
+            var esri = L.tileLayer(
+                'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    maxZoom: 14,
+                    minZoom: 1,
+                    attribution: 'Tiles © Esri',
+            }).addTo (mimapa);
             var osm= L.tileLayer(
                 'http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png',{
                 //'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-                maxZoom : 18,
+                maxZoom : 14,
                 minZoom : 1,
                 attribution : 'OSM'
             }).addTo (mimapa); //vull afegir aquesta capa a la meva variable "mimapa"
             
-            controlEscala=L.control.scale({metric:'true'});
-            controlEscala.addTo (mimapa); //afegeixo control d'escala
-            
+            var baseMaps = {
+                "Orto": esri
+                
+            };
+            var overlayMaps = {
+                "OSM": osm
+            };
+            controlCapas = L.control.layers(baseMaps, overlayMaps);
+            controlCapas.addTo(mimapa);
+ 
             //Posición on he fet click: Aqui li estem dient que quan fem click al mapa executi una funció, i dins la funció rebem un paràmetre event que conté la posició a event.latlng
             mimapa.on('click', function(onMapClick) {       
                 var popLocation= onMapClick.latlng;
-                //Aixo pintaria com una bombolla al mapa allà on li indiques anteriorment
+                alert(popLocation);
+                //Això pintaria el marcador al mapa
+                var miPosicion = new L.circleMarker(popLocation).addTo(mimapa).bindPopup("Estàs aqui"); 
+                       
+                /*Aixo pintaria com un bocata al mapa allà on li indiques anteriorment
                 var popup = L.popup()
                     .setLatLng(popLocation) //indiques on vols posar popup
                     .setContent('<p> Estàs aqui.</p>') //text que surt en el popup
-                    .openOn(mimapa); //pinta el popup al meu mapa
-                //Això pintaria el marcador al mapa
-                var newMarker = new L.marker(popLocation).addTo(mimapa); 
+                    .openOn(mimapa); //pinta el popup al meu mapa*/
+                
             });
             
+            controlEscala = L.control.scale({imperial:false});
+            controlEscala.addTo(mimapa);   
 
+            //busquem restaurants a un radi determinat
+            var opl;
+            if (mimapa.hasLayer(opl)) {mimapa.removeLayer(opl)}         
             
-
+          /* opl = new L.OverPassLayer({
+                debug: true,
+                minZoom: 14,
+                endPoint: 'https://overpass-api.de/api/',
+               // query: node(around.popLocation:1000.0)["amenity"="restaurant"], out,
+               query: node({around:1000.0,popLocation})["amenity"="restaurant"],out
+             
+            });
+            mimapa.addLayer(opl);*/
         };
+
+    
     </script>
 
 </head>
 <!--crido a la funció inicialitzar en el body-->
 <body onLoad="init()">
     <div id="mapid"></div>
+  
 </body>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Leaflet OverPass Layer demo page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.css" />
+    <link rel="stylesheet" href="OverPassLayer.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.js"></script>
+    <script src="OverPassLayer.bundle.js"></script>
+
+
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body,
+        #mapid {
+            height: 100%;
+            width: 100%;
+        }
+
+      
+    </style>
+    <script>
+        var opl;
+        var pos;
+        var map;
+        function miLocalizacion(){
+            map.on('click', function(onMapClick) {       
+                var popLocation= onMapClick.latlng;
+                alert(popLocation);
+                //Això pintaria el marcador al mapa
+                var miPosicion = new L.circleMarker(popLocation).addTo(map).bindPopup("Estàs aqui"); 
+                return miPosicion;
+                });
+        }
+        function cercaCapaOverpass() {
+          
+            if (map.hasLayer(opl)) {  map.removeLayer(opl) }
+            pos= miLocalizacion(),
+            opl = new L.OverPassLayer({
+                debug: true,
+                minZoom: 16,
+                endPoint: 'https://overpass-api.de/api/',
+                //ejemplo bbox-- query: 'node({{bbox}})["tourism"="museum"];out;',
+                //Si funciona --query: 'node(around:1000.0, 41.390268, 2.166538)["amenity"="restaurant"];out;',
+                // intento de funcionamiento -- query:'node({{bbox}})[pos];node(around:1000.0)["amenity"="restaurant"];out;',
+                //no lee el pos -- query: 'node(around:1000.0, pos)["amenity"="restaurant"];out;',
+                //query: 'node(around.pos:1000.0)["amenity"="restaurant"];out;',
+                
+                
+                minZoomIndicatorOptions: {
+                    position: 'topright',
+                    minZoomMessage: 'Current zoom level: CURRENTZOOM - All data at level: MINZOOMLEVEL'
+                }
+            });
+            map.addLayer(opl);
+            
+        }
+
+    </script>
+</head>
+
+<body onLoad="cercaCapaOverpass()" >
+  
+    <div id="mapid"></div>
+    <script>
+        
+        var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+        var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.390268, 2.166538), 16);
+
+
+    </script>
+</body>
+
+</html>
