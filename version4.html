@@ -23,9 +23,8 @@
         #mapid {
             height: 100%;
             width: 100%;
-          
             left:300px;
-            top: -560px;
+            top: -625px;
             text-align:left;
         }
         #barramenu {
@@ -36,18 +35,29 @@
             position:static;
         
         }
-        #seldiv {
+        .titular {
+            padding: 11px;
+            position:absolute;
+            top: 10px;
+            left: 5px;
+        }
+        .icono {
+            padding: 11px;
+            position:absolute;
+            /*top: 180px;*/
+            top: 120px;
+            left: 80px;
+        }
+        #seldiv{
             padding: 11px;
             position: absolute;
-            top: 10px;
-            left: 20px;
+            /*top: 150px;*/
+            top:250px;
+            left: 35px;
             width: 200px;
-            background-color: white;
+            background-color: black;
             height: 22px;
-
-
         }
-      
     </style>
     <script>
         var opl;
@@ -71,6 +81,7 @@
                 minZoom: 16,
                 endPoint: 'https://overpass-api.de/api/',
                 query:'node["addr:city"="' + document.getElementById("seleccio").value + '"]["amenity"="restaurant"];out;',
+                center:[41.390268, 2.166538],
                 minZoomIndicatorOptions: {
                     position: 'topright',
                     minZoomMessage: 'Current zoom level: CURRENTZOOM - All data at level: MINZOOMLEVEL'
@@ -84,11 +95,18 @@
 </head>
 
 <body onLoad="cercaCapaOverpass()" >
-    <div id="barramenu"></div>
+    <div id="barramenu">
+        <p class="titular"><img src="tit.png"/></p>
+        <p class="icono"><img src="imagen.png"/></p>
+    </div>
+    
+        
+ 
     <div id="seldiv">
         <select id="seleccio" onChange="cercaCapaOverpass()">
             <option value="">¿Dónde quieres comer hoy?</option>
             <option value="Barcelona">Barcelona</option>
+            <option value="Tarragona">Tarragona</option>
         </select>
     </div id="seldiv"> 
   
@@ -96,8 +114,8 @@
     <script>
         
         var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.390268, 2.166538), 16);
-
+        // Barcelona: var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.390268, 2.166538), 9);
+        var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.115, 1.2499), 16); //Tarragona
 
     </script>
 </body>
