@@ -23,15 +23,37 @@
         #mapid {
             height: 100%;
             width: 100%;
+          
+            left:300px;
+            top: -560px;
+            text-align:left;
         }
+        #barramenu {
+          
+            height:100%;
+            width:300px;
+            background-color: black;
+            position:static;
+        
+        }
+        #seldiv {
+            padding: 11px;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            width: 200px;
+            background-color: white;
+            height: 22px;
 
+
+        }
       
     </style>
     <script>
         var opl;
         var pos;
         var map;
-        function miLocalizacion(){
+        /*function miLocalizacion(){
             map.on('click', function(onMapClick) {       
                 var popLocation= onMapClick.latlng;
                 alert(popLocation);
@@ -39,21 +61,16 @@
                 var miPosicion = new L.circleMarker(popLocation).addTo(map).bindPopup("Estàs aqui"); 
                 return miPosicion;
                 });
-        }
+        }*/
         function cercaCapaOverpass() {
           
             if (map.hasLayer(opl)) {  map.removeLayer(opl) }
-            pos= miLocalizacion(),
+            //pos= miLocalizacion(),
             opl = new L.OverPassLayer({
                 debug: true,
                 minZoom: 16,
                 endPoint: 'https://overpass-api.de/api/',
-                //ejemplo bbox-- query: 'node({{bbox}})["tourism"="museum"];out;',
-                //Si funciona --query: 'node(around:1000.0, 41.390268, 2.166538)["amenity"="restaurant"];out;',
-                query:'node(around:1000.0,'+pos.lat+','+pos.lng+')["amenity"="restaurant"];out;',
-                //no lee el pos -- query: 'node(around:1000.0, pos)["amenity"="restaurant"];out;',
-                //query: 'node(around.pos:1000.0)["amenity"="restaurant"];out;',
-                
+                query:'node["addr:city"="' + document.getElementById("seleccio").value + '"]["amenity"="restaurant"];out;',
                 minZoomIndicatorOptions: {
                     position: 'topright',
                     minZoomMessage: 'Current zoom level: CURRENTZOOM - All data at level: MINZOOMLEVEL'
@@ -67,12 +84,18 @@
 </head>
 
 <body onLoad="cercaCapaOverpass()" >
+    <div id="barramenu"></div>
+    <div id="seldiv">
+        <select id="seleccio" onChange="cercaCapaOverpass()">
+            <option value="">¿Dónde quieres comer hoy?</option>
+            <option value="Barcelona">Barcelona</option>
+        </select>
+    </div id="seldiv"> 
   
     <div id="mapid"></div>
     <script>
         
         var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-
         var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.390268, 2.166538), 16);
 
 
