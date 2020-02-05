@@ -81,7 +81,11 @@
                 minZoom: 16,
                 endPoint: 'https://overpass-api.de/api/',
                 query:'node["addr:city"="' + document.getElementById("seleccio").value + '"]["amenity"="restaurant"];out;',
-                center:[41.390268, 2.166538],
+                center:{
+                    element= document.getElementById("seleccio"),
+                    if(element="Barcelona"){center= [41.390268, 2.166538]},
+                    
+                },
                 minZoomIndicatorOptions: {
                     position: 'topright',
                     minZoomMessage: 'Current zoom level: CURRENTZOOM - All data at level: MINZOOMLEVEL'
@@ -114,8 +118,10 @@
     <script>
         
         var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.115,1.2499), 9);
+        
         // Barcelona: var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.390268, 2.166538), 9);
-        var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.115, 1.2499), 16); //Tarragona
+        //var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.115, 1.2499), 16); //Tarragona
 
     </script>
 </body>
