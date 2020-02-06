@@ -59,26 +59,26 @@
     </style>
     <script>
         var opl;
-        var pos;
         var map;
-        /*function miLocalizacion(){
-            map.on('click', function(onMapClick) {       
-                var popLocation= onMapClick.latlng;
-                alert(popLocation);
-                //Això pintaria el marcador al mapa
-                var miPosicion = new L.circleMarker(popLocation).addTo(map).bindPopup("Estàs aqui"); 
-                return miPosicion;
-                });
-        }*/
-        function cercaCapaOverpass() {
+     
+        function cercaCapaOverpass(position) {
           
             if (map.hasLayer(opl)) {  map.removeLayer(opl) }
-            //pos= miLocalizacion(),
+            
+            var center;
+            if (position) {
+                center = position;
+            } else {
+                center = map.getCenter();
+            }
+            
+
+            
             opl = new L.OverPassLayer({
                 debug: false,
-                minZoom: 16,
+                minZoom: 13,
                 endPoint: 'https://overpass-api.de/api/',
-                query:'node["addr:city"="' + document.getElementById("seleccio").value + '"]["amenity"="restaurant"];out;',
+                query: 'node(around:1000.0,' + center.lat + ',' + center.lng + ')["amenity"="restaurant"];out;',
                 minZoomIndicatorOptions: {
                     position: 'topright',
                     minZoomMessage: 'Current zoom level: CURRENTZOOM - All data at level: MINZOOMLEVEL'
@@ -87,7 +87,15 @@
             map.addLayer(opl);
             
         }
+        function cercaLLoc(valor) {
+            if (valor) {
+               
+                var center = JSON.parse(valor);
+                map.setView([center.lat, center.lng], 16);
+                cercaCapaOverpass(null);
 
+            }
+        }
     </script>
 </head>
 
@@ -100,21 +108,29 @@
         
  
     <div id="seldiv">
-        <select id="seleccio" onChange="cercaCapaOverpass()">
-            <option value="">¿Dónde quieres comer hoy?</option>
-            <option value="Barcelona">Barcelona</option>
-            <option value="Tarragona">Tarragona</option>
+        <select onChange="cercaLLoc(this.value)">
+            <option value=null>On dinem avui?</option>
+            <option value={"lat":41.38204130362697,"lng":2.176457047462464}>Barcelona- Barri Gòtic</option>
+            <option value={"lat":41.40577711039221,"lng":2.178639099952703}>Barcelona- Barri Sagrada Familia</option>
+            <option value={"lat":41.37955648575809,"lng":2.140825942462622}>Barcelona- Barri Sants</option>
+            <option value={"lat":41.40338288513903,"lng":2.205466061088853}>Barcelona- Barri Poblenou</option>
+            <option value={"lat":41.37246104787145,"lng":2.162396907806397}>Barcelona- Barri Poble Sec</option>
+            <option value={"lat":41.37961369088882,"lng":2.160168341674523}>Barcelona- Barri Sant Antoni</option>
+            <option value={"lat":41.40330132053009,"lng":2.157437394728236}>Barcelona- Barri Gràcia</option>
+            <option value={"lat":41.38970902723610,"lng":2.194936210934067}>Barcelona- La Vila Olímpica</option>
+            <option value={"lat":41.39376630076931,"lng":2.169060108526247}>Barcelona- La Dreta de l'Eixample</option>
+
         </select>
+
+       
     </div id="seldiv"> 
   
     <div id="mapid"></div>
     <script>
         
         var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        //var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.115,1.2499), 9);
-        
-        // Barcelona: var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.390268, 2.166538), 9);
-        var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.115, 1.2499), 16); //Tarragona
+        var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.390268, 2.166538), 12);
+     
 
     </script>
 </body>
