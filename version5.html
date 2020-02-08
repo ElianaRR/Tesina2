@@ -60,7 +60,12 @@
     <script>
         var opl;
         var map;
-     
+        var restaurantIcon= L.icon({
+            iconUrl:'icono_rest.svg',
+            iconSize: [38, 95],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76],
+        });
         function cercaCapaOverpass(position) {
           
             if (map.hasLayer(opl)) {  map.removeLayer(opl) }
@@ -72,13 +77,30 @@
                 center = map.getCenter();
             }
             
-
-            
             opl = new L.OverPassLayer({
                 debug: false,
                 minZoom: 13,
                 endPoint: 'https://overpass-api.de/api/',
                 query: 'node(around:1000.0,' + center.lat + ',' + center.lng + ')["amenity"="restaurant"];out;',
+                onSuccess: function(data) {
+                    for(i=0;i<data.elements.length;i++) {
+                        e = data.elements[i];
+                        var pos = new L.LatLng(e.lat, e.lon);
+                        /*var color = 'green';
+                          L.circle(pos, 5, {
+                            color: color,
+                            fillColor: '#fa3',
+                            fillOpacity: 1,
+                        }).addTo(map);*/                      
+                        L.marker(pos,{
+
+                            icon:restaurantIcon,
+                            draggable: true,
+                            riseOnHover:true
+                        }).addTo(map);
+
+                    }
+                },
                 minZoomIndicatorOptions: {
                     position: 'topright',
                     minZoomMessage: 'Current zoom level: CURRENTZOOM - All data at level: MINZOOMLEVEL'
