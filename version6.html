@@ -104,7 +104,8 @@
                 },    
                 minZoomIndicatorOptions: {
                     position: 'topright',
-                    minZoomMessage: 'Current zoom level: CURRENTZOOM - All data at level: MINZOOMLEVEL'
+                   
+                    minZoomMessage: 'Nivel de zoom actual: CURRENTZOOM - Todos los datos a nivel: MINZOOMLEVEL'
                 }
             });
             map.addLayer(opl);
@@ -150,12 +151,17 @@
   
     <div id="mapid"></div>
     <script>
-             
-        var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-       
-
-        var map = new L.Map('mapid', { hash: true }).addLayer(osm).setView(new L.LatLng(41.390268, 2.166538), 12);
-       
+        var map = new L.Map('mapid').setView(new L.LatLng(41.390268, 2.166538), 12);  
+        var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'OSM'}).addTo(map);
+        var esri= new L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {attribution: 'Tiles © Esri'});
+        var baseMaps = {
+            "OSM": osm,
+            "ESRI": esri
+        };
+        
+        var controlCapas = L.control.layers(baseMaps, null);
+        controlCapas.addTo(map);
+        
 
     </script>
 </body>
