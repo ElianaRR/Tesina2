@@ -29,10 +29,10 @@
             display: flex;
         }
 
-        #mapid {
+        #mapid { /*definir estilo mapa*/
            flex-grow: 1;
         }
-        #barramenu {
+        #barramenu { /*definir estilo menú*/
             flex-shrink: 0;
             width:300px;
             background-color: black;
@@ -51,7 +51,7 @@
             top: 120px;
             left: 80px;
         }
-        #seldiv{
+        #seldiv{ /*definir estilo selector*/
             padding: 11px;
             position: absolute;
             /*top: 150px;*/
@@ -92,20 +92,23 @@
                     for(i=0;i<data.elements.length;i++) {
                         e = data.elements[i]; 
                         var pos = new L.LatLng(e.lat, e.lon);  
-                                           
+                        console.info(e.tags);                   
                         L.marker(pos,{
                             icon:restaurantIcon,
                             //draggable: true,
                             riseOnHover:true, //no funciona con el icon pero si con el marker por defecto
                             title:e.tags.name, //me muestra el nombre del restaurante
+                            tipus:e.tags.amenity
                         }).on('click', markerOnClick).addTo(grupo); //añado markers al cluster
                            
                     }
                     map.addLayer(grupo); //añado el cluster al mapa
                     function markerOnClick(event)
                         {
-                            window.open('https://www.google.com/', /*'http://'+e.tags.name+'.com',*/
-                                        '_blank' //al clicar sobre marker me abre otra pestaña y me lleva a google
+                            var restaurante = event.target.options.tipus + " "
+						    +event.target.options.title;
+                            window.open('https://www.google.com/?q='+restaurante, 
+                                        '_blank' //al clicar sobre marker me abre otra pestaña y me lleva a google rellenadno buscador con nombre restaurante
                                         );
                         }
 
