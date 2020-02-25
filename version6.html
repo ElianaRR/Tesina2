@@ -26,14 +26,14 @@
 
         body {
             height: 100%;
-            display: flex;
+            display: flex; /*Define el contenedor. Permite adaptar con flexibilidad para sus hijos directos*/
         }
 
         #mapid { /*definir estilo mapa*/
-           flex-grow: 1;
+           flex-grow: 1; /* El espacio restante del contenedor se distribuye de forma equivalente entre todos los hijos*/
         }
         #barramenu { /*definir estilo menú*/
-            flex-shrink: 0;
+            flex-shrink: 0; /*Define la flexibilidad de un elemento para encogerse si es necesario */
             width:300px;
             background-color: black;
         
@@ -61,15 +61,18 @@
             background-color: black;
             height: 22px;
         }
+
     </style>
     <script>
         var opl;
         var map;
+
         var restaurantIcon= L.icon({
-            iconUrl:'icono_rest.svg',
+            iconUrl:'dades/icono_rest2.svg', //canvio el color negro inicial por un color rosa en el propio archivo
             iconSize: [38, 95],
             iconAnchor: [22, 94],
             popupAnchor: [-3, -76],
+            
         });
         function cercaCapaOverpass(position) {
           
@@ -135,8 +138,8 @@
 
 <body onLoad="cercaCapaOverpass()" >
     <div id="barramenu">
-        <p class="titular"><img src="tit.png"/></p>
-        <p class="icono"><img src="imagen.png"/></p>
+        <p class="titular"><img src="dades/tit.png"/></p>
+        <p class="icono"><img src="dades/imagen.png"/></p>
     </div>
     
         
@@ -160,9 +163,28 @@
         var map = new L.Map('mapid').setView(new L.LatLng(41.390268, 2.166538), 8);  
         var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'OSM'}).addTo(map);
         var esri= new L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {attribution: 'Tiles © Esri'});
+        
+        var hibrid =L.layerGroup();
+
+        var Esri_WorldImagery2 =
+        L.tileLayer(
+            'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX,GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+            }).addTo(hibrid);
+
+        var Stamen_TonerHybrid = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-hybrid/{z}/{x}/{y}{r}.{ext}', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        subdomains: 'abcd',
+        minZoom: 0,
+        maxZoom: 20,
+        ext: 'png'
+    }).addTo(hibrid);
+        
         var baseMaps = {
             "OSM": osm,
+            "hibrid":hibrid,
             "ESRI": esri
+
         };
         
         var controlCapas = L.control.layers(baseMaps, null);
