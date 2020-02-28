@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Leaflet OverPass Layer demo page</title>
+    <title> Visor de restaurantes en Cataluña</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.6.0/leaflet.css" />
@@ -47,14 +47,12 @@
         .icono {
             padding: 11px;
             position:absolute;
-            /*top: 180px;*/
             top: 120px;
             left: 80px;
         }
         #seldiv{ /*definir estilo selector*/
             padding: 11px;
             position: absolute;
-            /*top: 150px;*/
             top:250px;
             left: 35px;
             width: 200px;
@@ -86,7 +84,6 @@
             }
             
             opl = new L.OverPassLayer({
-                //debug: false,
                 minZoom: 9,
                 endPoint: 'https://overpass-api.de/api/',
                 query: 'node(around:5000.0,' + center.lat + ',' + center.lng + ')["amenity"="restaurant"];out;',
@@ -98,8 +95,6 @@
                         console.info(e.tags);                   
                         L.marker(pos,{
                             icon:restaurantIcon,
-                            //draggable: true,
-                            riseOnHover:true, //no funciona con el icon pero si con el marker por defecto
                             title:e.tags.name, //me muestra el nombre del restaurante
                             tipus:e.tags.amenity
                         }).on('click', markerOnClick).addTo(grupo); //añado markers al cluster
@@ -109,10 +104,10 @@
                     function markerOnClick(event)
                         {
                             var restaurante = event.target.options.tipus + " "
-						    +event.target.options.title;
-                            window.open('https://www.google.com/?q='+restaurante, 
+						    +event.target.options.title;                                
+                           window.open('https://www.google.com/?q='+restaurante, 
                                         '_blank' //al clicar sobre marker me abre otra pestaña y me lleva a google rellenadno buscador con nombre restaurante
-                                        );
+                                        )                       
                         }
 
                 },    
