@@ -132,6 +132,7 @@
 </head>
 
 <body onLoad="cercaCapaOverpass()" >
+    
     <div id="barramenu">
         <p class="titular"><img src="dades/tit.png"/></p>
         <p class="icono"><img src="dades/imagen.png"/></p>
@@ -146,14 +147,12 @@
             <option value={"lat":41.1188827,"lng":1.2444909}>Tarragona</option>
             <option value={"lat":41.9831085,"lng":2.82493}>Girona</option>
             <option value={"lat":41.6167412,"lng":0.62218}>Lleida</option>
-            
-
         </select>
-
-       
+ 
     </div id="seldiv"> 
   
     <div id="mapid"></div>
+    
     <script>
         var map = new L.Map('mapid').setView(new L.LatLng(41.390268, 2.166538), 8);  
         var osm= new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'OSM'}).addTo(map);
